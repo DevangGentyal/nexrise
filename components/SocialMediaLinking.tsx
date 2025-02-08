@@ -9,10 +9,6 @@ export default function SocialMediaLinking() {
         <CardTitle>Connect Your Social Media</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 p-6">
-        <Button className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-full py-6 flex items-center justify-center space-x-2">
-          <Linkedin className="w-6 h-6" />
-          <span>Connect LinkedIn</span>
-        </Button>
         <Button className="w-full bg-gradient-to-r from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-600 text-white rounded-full py-6 flex items-center justify-center space-x-2">
           <Twitter className="w-6 h-6" />
           <span>Connect Twitter</span>

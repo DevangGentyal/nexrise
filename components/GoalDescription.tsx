@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function GoalDescription() {
   return (
-    <Card className="w-full overflow-hidden">
+    <Card className="w-full overflow-hidden shadow-lg shadow-blue-500/50">
       <CardHeader className="bg-gradient-to-r from-green-400 to-blue-500 text-white">
         <CardTitle>Describe Your Branding Goals</CardTitle>
       </CardHeader>
