@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
-import SocialInsights from "@/components/SocialInsights"
+import SocialMetrics from "@/components/SocialMetrics"
 import GrowthSuggestions from "@/components/GrowthSuggestions"
 import BrandingGoals from "@/components/BrandingGoals"
 
 export default function Analysis() {
+  
   return (
     <div className="container mx-auto px-4 py-16 max-w-6xl">
       <h1 className="text-4xl font-bold text-center mb-12">Your Brand Analysis</h1>
@@ -14,8 +15,8 @@ export default function Analysis() {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-6">Social Insights</h2>
-        <SocialInsights />
+        <h2 className="text-2xl font-semibold mb-6">Current Social Metrics</h2>
+        <SocialMetrics />
       </section>
 
       <section className="mb-12">

@@ -1,107 +1,241 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Lightbulb, TrendingUp, Users, MessageCircle, CheckCircle2 } from "lucide-react"
+'use client'
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Lightbulb, TrendingUp, Users, MessageCircle, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { constructFromSymbol } from "date-fns/constants";
 
-const suggestions = [
-  {
-    title: "Increase Twitter Engagement",
-    description: "Post more consistently on Twitter to boost engagement.",
-    icon: MessageCircle,
-    color: "text-blue-500",
-    bgColor: "bg-blue-100",
-    tags: ["Twitter", "Engagement"],
-    steps: [
-      { text: "Schedule 3 tweets per day", completed: true },
-      { text: "Use relevant hashtags", completed: true },
-      { text: "Engage with followers' content", completed: false },
-      { text: "Run a Twitter poll", completed: false },
-    ],
-    progress: 50,
-  },
-  {
-    title: "Optimize Instagram Hashtags",
-    description: "Use more relevant hashtags on Instagram to reach a wider audience.",
-    icon: TrendingUp,
-    color: "text-pink-500",
-    bgColor: "bg-pink-100",
-    tags: ["Instagram", "Reach"],
-    steps: [
-      { text: "Research trending hashtags", completed: true },
-      { text: "Create branded hashtag", completed: true },
-      { text: "Use location-based hashtags", completed: false },
-      { text: "Analyze hashtag performance", completed: false },
-    ],
-    progress: 50,
-  },
-  {
-    title: "LinkedIn Thought Leadership",
-    description: "Share more industry insights on LinkedIn to establish thought leadership.",
-    icon: Lightbulb,
-    color: "text-blue-700",
-    bgColor: "bg-blue-100",
-    tags: ["LinkedIn", "Authority"],
-    steps: [
-      { text: "Write 1 long-form article", completed: true },
-      { text: "Share 2 industry news items", completed: true },
-      { text: "Comment on 5 posts in your network", completed: false },
-      { text: "Participate in a LinkedIn group discussion", completed: false },
-    ],
-    progress: 50,
-  },
-  {
-    title: "Facebook Live Engagement",
-    description: "Engage more with your Facebook followers through live videos and Q&A sessions.",
-    icon: Users,
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
-    tags: ["Facebook", "Live", "Interaction"],
-    steps: [
-      { text: "Schedule your first live session", completed: true },
-      { text: "Promote the live session", completed: true },
-      { text: "Prepare talking points", completed: false },
-      { text: "Host a 30-minute Q&A", completed: false },
-    ],
-    progress: 50,
-  },
-]
+// User ID (Set dynamically based on logged-in user)
+const user_id = 2; // Change dynamically if needed
+async function updateUser(userId: any, column: any, value: any) {
+  try {
+    const response = await fetch("/api/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, column, value }),
+    });
 
-export default function GrowthSuggestions() {
-  return (
-    <div className="grid grid-cols-1 gap-6">
-      {suggestions.map((suggestion, index) => (
-        <Card key={index} className="overflow-hidden">
-          <CardHeader className={`${suggestion.bgColor} flex flex-row items-center space-y-0 py-4`}>
-            <CardTitle className="text-xl font-bold flex items-center">
-              <suggestion.icon className={`w-6 h-6 ${suggestion.color} mr-2`} />
-              {suggestion.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <p className="text-gray-600 mb-4">{suggestion.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {suggestion.tags.map((tag, tagIndex) => (
-                <Badge key={tagIndex} variant="secondary">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-            <div className="space-y-2 mb-4">
-              {suggestion.steps.map((step, stepIndex) => (
-                <div key={stepIndex} className="flex items-center">
-                  <CheckCircle2 className={`w-5 h-5 mr-2 ${step.completed ? "text-green-500" : "text-gray-300"}`} />
-                  <span className={step.completed ? "text-gray-700" : "text-gray-500"}>{step.text}</span>
-                </div>
-              ))}
-            </div>
-            <div>
-              <p className="text-sm text-gray-500 mb-2">Progress</p>
-              <Progress value={suggestion.progress} className="h-2" />
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  )
+    if (response.status === 204) {
+      console.log("User updated successfully (No Content)");
+      return;
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text(); // Read error as text
+      throw new Error(errorText || "Something went wrong");
+    }
+
+    const data = await response.json();
+    console.log("User updated successfully:", data);
+  } catch (error) {
+    console.error("Error updating user:", error);
+  }
 }
 
+const iconMap = {
+  Lightbulb,
+  TrendingUp,
+  Users,
+  MessageCircle,
+} as const;
+
+interface Step {
+  text: string;
+  completed: boolean;
+}
+
+interface Suggestion {
+  title: string;
+  description: string;
+  icon: keyof typeof iconMap;
+  bgColor: string;
+  tags: string[];
+  steps: Step[];
+  progress: number;
+}
+
+const backgroundColors = [
+  'bg-amber-100',
+  'bg-blue-100',
+  'bg-indigo-100',
+  'bg-green-100',
+  'bg-purple-100',
+];
+
+const iconColors = {
+  Lightbulb: 'text-amber-500',
+  TrendingUp: 'text-blue-500',
+  Users: 'text-indigo-500',
+  MessageCircle: 'text-green-500',
+} as const;
+
+export default function GrowthSuggestions() {
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const parseAndValidateSuggestion = (data: any, index: number): Suggestion | null => {
+    try {
+      const suggestion = typeof data === 'string' ? JSON.parse(data) : data;
+
+      return {
+        title: suggestion.title || 'Untitled',
+        description: suggestion.description || 'No description available',
+        icon: (suggestion.icon in iconMap ? suggestion.icon : 'Lightbulb') as keyof typeof iconMap,
+        bgColor: backgroundColors[index % backgroundColors.length],
+        tags: suggestion.tags || [],
+        steps: suggestion.steps || [],
+        progress: suggestion.progress || 0
+      };
+    } catch (err) {
+      console.error("Error parsing suggestion:", err);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    async function fetchSuggestions() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const fetchGoalData = async () => {
+          const response = await fetch("/api/read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id, column: "goals" }),
+          });
+          const result = await response.json();
+          return result?.data || null;
+        };
+
+        const fetchSocialMetrics = async () => {
+          const response = await fetch("/api/read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id, column: "socialMetrics" }),
+          });
+          const result = await response.json();
+          return result?.data || null;
+        };
+
+        const [goaldata, socialMetrics] = await Promise.all([fetchGoalData(), fetchSocialMetrics()]);
+
+        if (!goaldata || !socialMetrics) {
+          throw new Error("Failed to retrieve goal data or social metrics.");
+        }
+
+        const response = await fetch("/api/groq", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: `Goal: ${JSON.stringify(goaldata)}, Current Metrics: ${JSON.stringify(socialMetrics)}`,
+            systemMsg: `Provide personalized structured growth suggestions based on the query in JSON format based on the query.
+              Each suggestion should include:
+              - title (string)
+              - description (string)
+              - icon (one of: MessageCircle, TrendingUp, Lightbulb, Users)
+              - tags (array of strings)
+              - steps (array of objects { text: string, completed: boolean })
+              - progress (number: 0-100).
+              Output strictly as a JSON array with no additional text. No whitespaces and newlines`,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const growthSuggestions = JSON.parse(await response.json());
+        // console.log("GrowthSuggestions Data:", responseData);
+        if (!Array.isArray(growthSuggestions)) {
+          throw new Error("Unexpected response format.");
+        }
+
+        updateUser(2, "insights", growthSuggestions);
+
+        const validSuggestions = growthSuggestions
+          .map((data, index) => parseAndValidateSuggestion(data, index))
+          .filter((s): s is Suggestion => s !== null);
+
+        if (validSuggestions.length === 0) {
+          throw new Error("No valid suggestions found.");
+        }
+
+        setSuggestions(validSuggestions);
+        localStorage.setItem("growthSuggestions", JSON.stringify(validSuggestions));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load suggestions");
+        console.error("Error fetching suggestions:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSuggestions();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-pulse text-gray-500">Loading suggestions...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+        <p className="text-red-600">Error: {error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col space-y-6 w-full">
+      {suggestions.map((suggestion, index) => {
+        const Icon = iconMap[suggestion.icon] || iconMap.Lightbulb;
+        const iconColor = iconColors[suggestion.icon] || 'text-gray-500';
+
+        return (
+          <Card key={index} className="w-full border border-gray-200">
+            <CardHeader className={`${suggestion.bgColor} py-4`}>
+              <CardTitle className="text-lg font-semibold flex items-center">
+                <Icon className={`w-5 h-5 ${iconColor} mr-2`} />
+                {suggestion.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4">
+              <p className="text-gray-600 text-sm mb-4">{suggestion.description}</p>
+              {suggestion.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {suggestion.tags.map((tag, tagIndex) => (
+                    <Badge key={tagIndex} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              {suggestion.steps.length > 0 && (
+                <div className="space-y-2 mb-4">
+                  {suggestion.steps.map((step, stepIndex) => (
+                    <div key={stepIndex} className="flex items-center">
+                      <Check className="w-4 h-4 mr-2 text-green-500" />
+                      <span className="text-md">{step.text}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
