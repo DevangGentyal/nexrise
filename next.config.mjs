@@ -23,6 +23,10 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  env: {
+    GROQ_API_KEY: process.env.GROQ_API_KEY || "",
+    RAPID_API_KEY: process.env.RAPID_API_KEY || "",
+  }
 }
 
 mergeConfig(nextConfig, userConfig)

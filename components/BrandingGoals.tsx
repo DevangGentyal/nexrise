@@ -86,7 +86,7 @@ export default function BrandingGoals() {
       name: "Engagement Rate",
       icon: Target,
       goal: `Increase engagement to ${goalData.metrics.engagement_rate || 0}`,
-      current: `${socialMetrics?.engagement_rate || 0}`,
+      current: `${socialMetrics.engagement_rate || 0}`,
       target: `${goalData.metrics.engagement_rate || 0}+`,
       progress:
         ((socialMetrics?.engagement_rate || 0) / (goalData.metrics.engagement_rate || 1)) *

@@ -154,7 +154,7 @@ export default function AIContentGenerator() {
               </div>
                 <br />
               <div className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700"> Profile Bio</label>
+                <label className="block text-sm font-medium text-gray-700"> Hook Lines</label>
                 <Textarea
                   placeholder="Your AI-generated bio will appear here..."
                   value={instagramBio}
@@ -171,7 +171,7 @@ export default function AIContentGenerator() {
                   ) : (
                     <Wand2Icon className="w-4 h-4 mr-2" />
                   )}
-                  Generate Bio
+                  Generate HookLine
                 </Button>
               </div>
             </div>

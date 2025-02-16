@@ -134,7 +134,7 @@ export default function SocialConnector({ setSocials }: SocialConnectorProps) {
           },
           body: JSON.stringify({
             query: JSON.stringify(data.profileMetrics),
-            systemMsg: `The above is the profile mretrics for the user, there are some missing values for the following fields Views and Shares for posts and albums. Please fill the missing values for these metrics based on the profileMetrics assumtions. Please assume as acurate as possible. Give the response in the JSON format. No other text than json, remove all headers and footers, start and end the response with {} No white spaces or \\n (new lines). Following is an example output:
+            systemMsg: `The above is the profile mretrics for the user, there are some missing values for the following fields Views and Shares for posts and albums. Please fill the missing values for these metrics based on the profileMetrics assumtions. Please assume as acurate as possible. Give the response in the JSON format. No other text than json, remove all headers and footers, start and end the response with {} No white spaces or \\n (new lines). Don't change the values for likes. Following is an example output:
             {
             user_name: 'devang.creates',
             user_full_name: 'Devang Creates',

@@ -130,11 +130,11 @@ export default function Roadmap() {
         </div>
       )}
       
-      {error && (
+      {/* {error && (
         <div className="text-center mb-8">
           <p className="text-red-500">Error: {error}</p>
         </div>
-      )}
+      )} */}
 
       <div className="space-y-4">
         {roadmapSteps.length > 0 ? (

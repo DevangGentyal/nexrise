@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     console.log("Fetching Instagram data for:", username);
 
     const headers = {
-      "X-RapidAPI-Key": "d633f9176cmsh867f21f317820d0p176f76jsn78cf548b8b08",
+      "X-RapidAPI-Key": process.env.RAPID_API_KEY || '',
       "X-RapidAPI-Host": "instagram-scraper-api2.p.rapidapi.com",
     };
 

@@ -49,7 +49,7 @@ export default function GoalSetter({ setGoals }: GoalSetterProps) {
           query: inputValue,
           systemMsg: `The above is a raw text of the goals that the user wants to achieve. I want you to go through the text and give me a proper breakdown of goals into metrics values which can be used to track the progress of the goals. Some users may not mention the metrics values, in that case, you can imagine the metrics values based on the goals. Also give an additional field as 'description' which will be a optimized description of the goal. I want the response to be in the JSON format with no other text. These metrics shold be fixed, no other metrics should be added. Don't miss any of the following fields: goal, metrics, description. These are the metrics that should be included: niche of the creator,followers, engagement rate, reach and post frequency. And the goals and metrics are about Social Media. the goal should be the same as the input text. MOST IMPORTANT THING IS TO HAVE NO slash or new lines in the output. Pure Json object with no whitespaces also.
           Example:
-          {"goal":"I want to become a top gamer influencer on Instagram","niche":"Gaming|Editing" "metrics":{"followers":"10M+","engagement_rate":"5%-15%","reach":"2M-30M+","post_frequency":"5-7"},"description":"Becoming one of the top gamers on Instagram"}
+          {"goal":"I want to become a top gamer influencer on Instagram","niche":"Gaming|Editing" "metrics":{"followers":"10M+","engagement_rate":"5-15%","reach":"2M-30M+","post_frequency":"5-7"},"description":"Becoming one of the top gamers on Instagram"}
           `,
         }),
       });
